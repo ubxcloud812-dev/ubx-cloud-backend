@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from app.schemas import EmailRequest
-from app.email_service import send_notification_marketing_email, send_notification_customer_email
+from app.email_service import send_notification_marketing_email, send_notification_customer_email, send_customer_summary_email
 from app.schemas import PdfEmailRequest
 from app.pdf_service import generate_pdf
 from app.email_service import send_email_with_pdf
@@ -28,7 +28,7 @@ def send_email(payload: EmailRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/summary/email-with-pdf")
+@router.post("/customer-estimate/summary/email-with-pdf")
 def send_email_pdf(payload: PdfEmailRequest):
     try:
         today = datetime.now().strftime("%d_%m_%Y")
@@ -44,6 +44,15 @@ def send_email_pdf(payload: PdfEmailRequest):
 
         return {"message": "Email with PDF sent successfully"}
 
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/marketing-estimate/summary/email")
+def send_summary_email(payload: PdfEmailRequest):
+    try:
+        send_customer_summary_email(payload)
+        return {"message": "Email sent successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
