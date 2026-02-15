@@ -24,6 +24,7 @@ def generate_pdf(data, file_path: str):
     )
 
     styles = getSampleStyleSheet()
+    normal_style = styles["Normal"]
     elements = []
 
     logo_path = os.path.join("assets", "Logo_UBXCloud-1.png")
@@ -38,15 +39,17 @@ def generate_pdf(data, file_path: str):
     )
     elements.append(Spacer(1, 20))
 
-    table_data = [
-        ["Selected Configuration", "Quantity", "Price"]
-    ]
+    table_data = [[
+        Paragraph("<b>Selected Configuration</b>", normal_style),
+        Paragraph("<b>Quantity</b>", normal_style),
+        Paragraph("<b>Price</b>", normal_style)
+    ]]
 
     for item in data.selected_configuration:
         table_data.append([
-            item.name,
-            str(item.quantity),
-            f"{item.price}"
+            Paragraph(item.name, normal_style),
+            Paragraph(str(item.quantity), normal_style),
+            Paragraph(f"{item.price}", normal_style)
         ])
     
     table_data.append(["", "", ""])
